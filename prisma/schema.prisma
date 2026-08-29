@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  username     String     @unique
+  passwordHash String
+  role         UserRole   @default(ADMIN)
+  personnelId  String?    @unique
+  personnel    Personnel? @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+}
+
+model Personnel {
+  id             String     @id @default(cuid())
+  matricule      String     @unique
+  nom            String
+  postnom        String
+  prenom         String
+  sexe           Sexe
+  contact        String?
+  adresse        String?
+  entreprise     String
+  service        String
+  departement    String
+  fonction       String
+  niveauEtude    String?
+  dateEngagement DateTime
+  qrToken        String?    @unique
+  photoReference String?    @db.Text
+  faceDescriptor String?    @db.Text
+  presences      Presence[]
+  cartes         Carte[]
+  compte         User?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model Carte {
+  id          String    @id @default(cuid())
+  personnelId String
+  personnel   Personnel @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+  imageDataUrl String   @db.Text
+  genereeLe   DateTime  @default(now())
+  envoyeeLe   DateTime?
+}
+
+model Presence {
+  id           Int            @id @default(autoincrement())
+  date         DateTime       @db.Date
+  heureArrivee DateTime?
+  heureDepart  DateTime?
+  personnelId  String
+  personnel    Personnel      @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+  statut       StatutPresence @default(PAS_ENCORE)
+
+  @@unique([personnelId, date])
+}
+
+enum Sexe {
+  MASCULIN
+  FEMININ
+}
+
+enum StatutPresence {
+  PAS_ENCORE
+  PRESENT
+  ABSENT
+}
+
+enum UserRole {
+  ADMIN
+  SUPERVISEUR
+  AGENT
+}
