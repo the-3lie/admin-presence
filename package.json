@@ -24,6 +24,7 @@
     "date-fns": "^3.6.0",
     "@vladmandic/face-api": "^1.7.15",
     "canvas": "^2.11.2",
+    "@tensorflow/tfjs-node": "^4.22.0",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
