@@ -38,7 +38,7 @@ export default function PersonnelPage() {
             className="flex-1 border border-[#DCD6C7] rounded-lg px-3 py-2"
           />
           <button onClick={charger} className="px-4 rounded-lg bg-ink text-paper font-semibold">
-            Rechercher
+            RechercheR
           </button>
           <button
             onClick={() => {
